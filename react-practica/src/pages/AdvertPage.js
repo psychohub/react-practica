@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import AdvertDetails from '../components/AdvertDetails';
+import AdvertDetails from '../components/adverts/AdvertDetails';
+import Loader from '../components/Loader';
 
 const AdvertPage = () => {
   const { id } = useParams();
   const [advert, setAdvert] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Lógica para obtener el anuncio desde el backend
     // y actualizar el estado `advert`
   }, [id]);
 
-  if (!advert) {
-    return <div>Cargando...</div>;
+  if (loading) {
+    return <Loader />;
   }
 
   return (

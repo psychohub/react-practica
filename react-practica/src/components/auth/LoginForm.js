@@ -1,0 +1,48 @@
+import React, { useState } from 'react';
+import { loginUser } from '../api/auth';
+
+const LoginForm = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { token } = await loginUser({ email, password });
+      // Guardar el token en el almacenamiento local o en el estado de la aplicación
+      // Realizar acciones adicionales después del inicio de sesión exitoso
+    } catch (error) {
+      setError('Error al iniciar sesión');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Contraseña:</label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      {error && <div className="error">{error}</div>}
+      <button type="submit">Iniciar sesión</button>
+    </form>
+  );
+};
+
+export default LoginForm;
