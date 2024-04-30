@@ -8,10 +8,14 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      setError('Por favor, completa todos los campos');
+      return;
+    }
     try {
       const { token } = await loginUser({ email, password });
-      // Guardar el token en el almacenamiento local o en el estado de la aplicación
-      // Realizar acciones adicionales después del inicio de sesión exitoso
+      localStorage.setItem('token', token);
+    
     } catch (error) {
       setError('Error al iniciar sesión');
     }
