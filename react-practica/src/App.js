@@ -1,25 +1,70 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import AdvertsPage from './pages/AdvertsPage';
+import AdvertPage from './pages/AdvertPage';
+import NewAdvertPage from './pages/NewAdvertPage';
+import NotFoundPage from './pages/NotFoundPage';
+import Navbar from './components/Navbar';
 
-function App() {
+const App = () => {
+  const isAuthenticated = () => {
+    return localStorage.getItem('token') !== null;
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        {isAuthenticated() && <Navbar />}
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/adverts"
+            element={
+              <RequireAuth>
+                <AdvertsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/adverts/:id"
+            element={
+              <RequireAuth>
+                <AdvertPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/adverts/new"
+            element={
+              <RequireAuth>
+                <NewAdvertPage />
+              </RequireAuth>
+            }
+          />
+          <Route path="/" element={<Navigate to="/adverts" />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
+
+const RequireAuth = ({ children }) => {
+  const isAuthenticated = () => {
+    return localStorage.getItem('token') !== null;
+  };
+
+  if (!isAuthenticated()) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
 
 export default App;

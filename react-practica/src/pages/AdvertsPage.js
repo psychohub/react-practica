@@ -24,6 +24,12 @@ const AdvertsPage = () => {
     fetchAdverts();
   }, []);
 
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    // Aquí puedes aplicar los filtros a la lista de anuncios
+    // y actualizar el estado `adverts` con los anuncios filtrados
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -36,11 +42,18 @@ const AdvertsPage = () => {
       </div>
     );
   }
+
   return (
     <div>
       <h1>Listado de Anuncios</h1>
-      <FilterForm onFilterChange={handleFilterChange} />
-      <AdvertList adverts={adverts} />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <FilterForm onFilterChange={handleFilterChange} />
+          <AdvertList adverts={adverts} />
+        </>
+      )}
     </div>
   );
 };

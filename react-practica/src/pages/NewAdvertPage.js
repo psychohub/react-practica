@@ -31,7 +31,7 @@ const NewAdvertPage = () => {
       return;
     }
 
-    setLoading(true); 
+    setLoading(true);
 
     try {
       await createAdvert({ name, sale, price, tags, photo });
@@ -40,7 +40,7 @@ const NewAdvertPage = () => {
       console.error('Error al crear el anuncio:', error);
     }
 
-    setLoading(false); 
+    setLoading(false);
   };
 
   return (
