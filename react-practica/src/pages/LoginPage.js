@@ -28,6 +28,7 @@ const LoginPage = () => {
       if (accessToken) {
         saveCredentials({ accessToken });
         console.log('Credenciales almacenadas');
+        localStorage.setItem('token', accessToken);
         if (rememberPassword) {
           localStorage.setItem('email', email);
         } else {
