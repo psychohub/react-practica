@@ -1,50 +1,54 @@
-import React, { useState } from 'react';
-import { loginUser } from '../api/auth';
+// LoginForm.js
+import React from 'react';
+import { MDBInput, MDBCheckbox, MDBBtn } from 'mdb-react-ui-kit';
 
-const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      setError('Por favor, completa todos los campos');
-      return;
-    }
-    try {
-      const { token } = await loginUser({ email, password });
-      localStorage.setItem('token', token);
-    
-    } catch (error) {
-      setError('Error al iniciar sesión');
-    }
-  };
-
+const LoginForm = ({
+  email,
+  password,
+  rememberPassword,
+  onEmailChange,
+  onPasswordChange,
+  onRememberPasswordChange,
+  onSubmit,
+  error,
+}) => {
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+    <form onSubmit={onSubmit}>
+      <MDBInput
+        wrapperClass="mb-4"
+        label="Correo electrónico"
+        id="form1"
+        type="email"
+        value={email}
+        onChange={onEmailChange}
+        required
+      />
+      <MDBInput
+        wrapperClass="mb-4"
+        label="Contraseña"
+        id="form2"
+        type="password"
+        value={password}
+        onChange={onPasswordChange}
+        required
+      />
+
+      <div className="d-flex justify-content-between mx-3 mb-4">
+        <MDBCheckbox
+          name="flexCheck"
+          value=""
+          id="flexCheckDefault"
+          label="Recordar contraseña"
+          checked={rememberPassword}
+          onChange={onRememberPasswordChange}
         />
       </div>
-      <div>
-        <label htmlFor="password">Contraseña:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      {error && <div className="error">{error}</div>}
-      <button type="submit">Iniciar sesión</button>
+
+      {error && <div className="text-danger mb-3">{error}</div>}
+
+      <MDBBtn type="submit" className="mb-4">
+        Iniciar sesión
+      </MDBBtn>
     </form>
   );
 };

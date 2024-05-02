@@ -6,7 +6,14 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Interceptor para agregar el token de autenticación a las peticiones
+export const setAuthorizationHeader = (token) => {
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+};
+
+export const removeAuthorizationHeader = () => {
+  delete api.defaults.headers.common['Authorization'];
+};
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -17,7 +24,7 @@ api.interceptors.request.use((config) => {
 
 export const getAdverts = async () => {
   try {
-    const response = await api.get('/adverts');
+    const response = await api.get('api/adverts');
     return response.data;
   } catch (error) {
     throw error.response.data;

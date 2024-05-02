@@ -1,13 +1,11 @@
+// LoginPage.js
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { loginUser } from '../api/auth';
-import {
-  MDBContainer,
-  MDBInput,
-  MDBCheckbox,
-  MDBBtn,
-  MDBIcon,
-} from 'mdb-react-ui-kit';
+import storage from '../utils/storage';
+import { setAuthorizationHeader } from '../api/api';
+import { MDBContainer } from 'mdb-react-ui-kit';
+import LoginForm from '../components/auth/LoginForm';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -23,7 +21,8 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const { token } = await loginUser({ email, password });
-      localStorage.setItem('token', token);
+      storage.set('auth', token);
+      setAuthorizationHeader(token);
       if (rememberPassword) {
         localStorage.setItem('email', email);
       } else {
@@ -37,43 +36,16 @@ const LoginPage = () => {
 
   return (
     <MDBContainer className="p-3 my-5 d-flex flex-column w-50">
-      <form onSubmit={handleSubmit}>
-        <MDBInput
-          wrapperClass="mb-4"
-          label="Correo electrónico"
-          id="form1"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <MDBInput
-          wrapperClass="mb-4"
-          label="Contraseña"
-          id="form2"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        <div className="d-flex justify-content-between mx-3 mb-4">
-          <MDBCheckbox
-            name="flexCheck"
-            value=""
-            id="flexCheckDefault"
-            label="Recordar contraseña"
-            checked={rememberPassword}
-            onChange={(e) => setRememberPassword(e.target.checked)}
-          />
-        </div>
-
-        {error && <div className="text-danger mb-3">{error}</div>}
-
-        <MDBBtn type="submit" className="mb-4">
-          Iniciar sesión
-        </MDBBtn>
-      </form>
+      <LoginForm
+        email={email}
+        password={password}
+        rememberPassword={rememberPassword}
+        onEmailChange={(e) => setEmail(e.target.value)}
+        onPasswordChange={(e) => setPassword(e.target.value)}
+        onRememberPasswordChange={(e) => setRememberPassword(e.target.checked)}
+        onSubmit={handleSubmit}
+        error={error}
+      />
     </MDBContainer>
   );
 };

@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from 'react-router-dom';
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import AdvertsPage from './pages/AdvertsPage';
 import AdvertPage from './pages/AdvertPage';
@@ -17,41 +12,41 @@ const App = () => {
     return localStorage.getItem('token') !== null;
   };
 
+  const location = useLocation();
+
   return (
-    <Router>
-      <div>
-        {isAuthenticated() && <Navbar />}
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route
-            path="/adverts"
-            element={
-              <RequireAuth>
-                <AdvertsPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/adverts/:id"
-            element={
-              <RequireAuth>
-                <AdvertPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/adverts/new"
-            element={
-              <RequireAuth>
-                <NewAdvertPage />
-              </RequireAuth>
-            }
-          />
-          <Route path="/" element={<Navigate to="/adverts" />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </div>
-    </Router>
+    <div>
+      {isAuthenticated() && <Navbar />}
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/adverts"
+          element={
+            <RequireAuth>
+              <AdvertsPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/adverts/:id"
+          element={
+            <RequireAuth>
+              <AdvertPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/adverts/new"
+          element={
+            <RequireAuth>
+              <NewAdvertPage />
+            </RequireAuth>
+          }
+        />
+        <Route path="/" element={<Navigate to="/adverts" />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </div>
   );
 };
 
