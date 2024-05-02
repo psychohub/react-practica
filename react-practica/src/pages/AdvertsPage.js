@@ -13,7 +13,6 @@ import {
   MDBPaginationItem,
   MDBPaginationLink,
 } from 'mdb-react-ui-kit';
-import Navbar from '../components/Navbar';
 
 const accessToken = storage.get('auth');
 if (accessToken) {
@@ -59,7 +58,6 @@ const AdvertsPage = () => {
 
   return (
     <>
-      <Navbar />
       <MDBContainer>
         <MDBRow>
           <MDBCol>

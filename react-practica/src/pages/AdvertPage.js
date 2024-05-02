@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import AdvertDetails from '../components/adverts/AdvertDetails';
 import Loader from '../components/Loader';
+
 import { getAdvertById } from '../api/adverts';
 
 const AdvertPage = () => {

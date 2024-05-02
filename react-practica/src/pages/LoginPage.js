@@ -1,11 +1,10 @@
-// LoginPage.js
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { loginUser } from '../api/auth';
-import storage from '../utils/storage';
-import { setAuthorizationHeader } from '../api/api';
+import { useAuth } from '../components/auth/AuthProvider';
 import { MDBContainer } from 'mdb-react-ui-kit';
 import LoginForm from '../components/auth/LoginForm';
+import { routes } from '../components/routes/links';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -13,24 +12,35 @@ const LoginPage = () => {
   const [rememberPassword, setRememberPassword] = useState(false);
   const [error, setError] = useState(null);
 
+  const { saveCredentials } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/adverts';
+  const from = location.state?.from?.pathname || routes.adverts;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Intentando iniciar sesión con:', email, password);
     try {
-      const { token } = await loginUser({ email, password });
-      storage.set('auth', token);
-      setAuthorizationHeader(token);
-      if (rememberPassword) {
-        localStorage.setItem('email', email);
+      const response = await loginUser({ email, password });
+      console.log('Respuesta de loginUser:', response);
+      const { accessToken } = response;
+      console.log('Token recibido:', accessToken);
+      if (accessToken) {
+        saveCredentials({ accessToken });
+        console.log('Credenciales almacenadas');
+        if (rememberPassword) {
+          localStorage.setItem('email', email);
+        } else {
+          localStorage.removeItem('email');
+        }
+        console.log('Redirigiendo a:', from);
+        navigate(from, { replace: true });
       } else {
-        localStorage.removeItem('email');
+        throw new Error('No accessToken received');
       }
-      navigate(from, { replace: true });
     } catch (error) {
-      setError('Error al iniciar sesión');
+      console.error('Error al iniciar sesión:', error);
+      setError('Error al iniciar sesión: ' + error.message);
     }
   };
 

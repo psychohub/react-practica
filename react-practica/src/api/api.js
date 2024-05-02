@@ -24,7 +24,7 @@ api.interceptors.request.use((config) => {
 
 export const getAdverts = async () => {
   try {
-    const response = await api.get('api/adverts');
+    const response = await api.get('api/v1/adverts');
     return response.data;
   } catch (error) {
     throw error.response.data;
