@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
 import { createAdvert, getTags } from '../../api/adverts';
+import { MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 
 const AdvertForm = () => {
   const [name, setName] = useState('');
@@ -12,7 +14,13 @@ const AdvertForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createAdvert({ name, sale, price, tags });
+      await createAdvert({
+        name,
+        sale,
+        price,
+        tags: selectedTags.map((tag) => tag.value),
+      });
+      setError(null);
     } catch (error) {
       setError('Error al crear el anuncio');
     }
@@ -22,7 +30,7 @@ const AdvertForm = () => {
     const fetchTags = async () => {
       try {
         const data = await getTags();
-        setTags(data);
+        setTags(data.map((tag) => ({ label: tag, value: tag })));
       } catch (error) {
         console.error('Error al obtener los tags:', error);
       }
@@ -32,60 +40,48 @@ const AdvertForm = () => {
   }, []);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="container mt-5">
+      <MDBInput
+        label="Nombre"
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
+
+      <select
+        className="select"
+        value={sale}
+        onChange={(e) => setSale(e.target.value === 'true')}
+        required
+      >
+        <option value="false">Compra</option>
+        <option value="true">Venta</option>
+      </select>
+
+      <MDBInput
+        label="Precio"
+        type="number"
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+        required
+      />
+
       <div>
-        <label htmlFor="name">Nombre:</label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="sale">Tipo:</label>
-        <select
-          id="sale"
-          value={sale}
-          onChange={(e) => setSale(e.target.value === 'true')}
-          required
-        >
-          <option value="false">Compra</option>
-          <option value="true">Venta</option>
-        </select>
-      </div>
-      <div>
-        <label htmlFor="price">Precio:</label>
-        <input
-          type="number"
-          id="price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="tags">Etiquetas:</label>
-        <select
-          id="tags"
-          multiple
+        <label>Etiquetas</label>
+        <Select
+          isMulti
+          options={tags}
           value={selectedTags}
-          onChange={(e) =>
-            setSelectedTags(
-              Array.from(e.target.selectedOptions, (option) => option.value)
-            )
-          }
-        >
-          {tags.map((tag) => (
-            <option key={tag} value={tag}>
-              {tag}
-            </option>
-          ))}
-        </select>
+          onChange={setSelectedTags}
+          className="basic-multi-select"
+          classNamePrefix="select"
+        />
       </div>
-      {error && <div className="error">{error}</div>}
-      <button type="submit">Crear anuncio</button>
+
+      {error && <div className="text-danger">{error}</div>}
+
+      <MDBBtn type="submit">Crear anuncio</MDBBtn>
     </form>
   );
 };
