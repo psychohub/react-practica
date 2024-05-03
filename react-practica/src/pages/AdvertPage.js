@@ -1,5 +1,3 @@
-// AdvertPage.js
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AdvertDetails from '../components/adverts/AdvertDetails';
@@ -22,6 +20,7 @@ const AdvertPage = () => {
       } catch (error) {
         console.error('Error al obtener el anuncio:', error);
         setLoading(false);
+        navigate('/NotFoundPage');
       }
     };
 

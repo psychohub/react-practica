@@ -20,12 +20,17 @@ const Navbar = () => {
   const [showNavNoToggler, setShowNavNoToggler] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
-    storage.remove('auth');
-    removeAuthorizationHeader();
-    logout();
-    navigate(routes.login);
+    const confirmLogout = window.confirm(
+      '¿Estás seguro de que deseas cerrar sesión?'
+    );
+    if (confirmLogout) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
+      storage.remove('auth');
+      removeAuthorizationHeader();
+      logout();
+      navigate(routes.login);
+    }
   };
 
   if (!isAuthenticated) {

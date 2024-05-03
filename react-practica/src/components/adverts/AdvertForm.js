@@ -1,30 +1,18 @@
+// AdvertForm.js
+
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { createAdvert, getTags } from '../../api/adverts';
 import { MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 
-const AdvertForm = () => {
+const AdvertForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
   const [sale, setSale] = useState(false);
   const [price, setPrice] = useState('');
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [photo, setPhoto] = useState(null);
   const [error, setError] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await createAdvert({
-        name,
-        sale,
-        price,
-        tags: selectedTags.map((tag) => tag.value),
-      });
-      setError(null);
-    } catch (error) {
-      setError('Error al crear el anuncio');
-    }
-  };
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -38,6 +26,23 @@ const AdvertForm = () => {
 
     fetchTags();
   }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!name || !price || selectedTags.length === 0) {
+      setError('Por favor, completa todos los campos obligatorios');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('sale', sale);
+    formData.append('price', price);
+    formData.append('tags', selectedTags.map((tag) => tag.value));
+    if (photo) {
+      formData.append('photo', photo);
+    }
+    onSubmit(formData);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="container mt-5">
@@ -76,12 +81,24 @@ const AdvertForm = () => {
           onChange={setSelectedTags}
           className="basic-multi-select"
           classNamePrefix="select"
+          required
+        />
+      </div>
+
+      <div>
+        <label>Foto</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setPhoto(e.target.files[0])}
         />
       </div>
 
       {error && <div className="text-danger">{error}</div>}
 
-      <MDBBtn type="submit">Crear anuncio</MDBBtn>
+      <MDBBtn type="submit" disabled={!name || !price || selectedTags.length === 0}>
+        Crear anuncio
+      </MDBBtn>
     </form>
   );
 };

@@ -14,8 +14,8 @@ const NewAdvertPage = () => {
   const handleSubmit = async (formData) => {
     try {
       setLoading(true);
-      const createdAdvert = await createAdvert(formData);
-      navigate(`/adverts/${createdAdvert.id}`);
+      await createAdvert(formData);
+      navigate('/adverts');
     } catch (error) {
       console.error('Error al crear el anuncio:', error);
       setLoading(false);
