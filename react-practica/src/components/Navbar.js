@@ -1,33 +1,31 @@
-import React from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../components/auth/AuthProvider';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import storage from '../utils/storage';
 import { removeAuthorizationHeader } from '../api/api';
+import { useAuth } from '../components/auth/AuthProvider';
 import {
   MDBNavbar,
   MDBContainer,
-  MDBNavbarBrand,
   MDBNavbarToggler,
   MDBNavbarItem,
-  MDBNavbarLink,
   MDBCollapse,
-  MDBNavbarNav,
   MDBBtn,
+  MDBIcon,
+  MDBNavbarNav,
 } from 'mdb-react-ui-kit';
-
+import { routes } from './routes/links';
 const Navbar = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
-
-  const [isOpen, setIsOpen] = React.useState(false);
-  const handleToggle = () => setIsOpen(!isOpen);
+  const [showNavNoToggler, setShowNavNoToggler] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('email');
     storage.remove('auth');
     removeAuthorizationHeader();
-    navigate('/login');
+    logout();
+    navigate(routes.login);
   };
 
   if (!isAuthenticated) {
@@ -35,33 +33,49 @@ const Navbar = () => {
   }
 
   return (
-    <MDBNavbar expand="lg" light bgColor="light">
+    <MDBNavbar
+      expand="lg"
+      light
+      bgColor="light"
+      className="navbar-light fixed-top"
+    >
       <MDBContainer fluid>
-        <MDBNavbarBrand>Mi Sitio</MDBNavbarBrand>
         <MDBNavbarToggler
           type="button"
-          aria-controls="navbarNav"
+          data-target="#navbarTogglerDemo01"
+          aria-controls="navbarTogglerDemo01"
+          aria-expanded="false"
           aria-label="Toggle navigation"
-          onClick={handleToggle}
+          onClick={() => setShowNavNoToggler(!showNavNoToggler)}
         >
-          <span className="navbar-toggler-icon"></span>
+          <MDBIcon icon="bars" fas />
         </MDBNavbarToggler>
-        <MDBCollapse navbar isOpen={isOpen}>
-          <MDBNavbarNav>
+        <MDBCollapse navbar show={showNavNoToggler}>
+          <MDBNavbarNav className="ms-auto align-items-center">
             <MDBNavbarItem>
-              <MDBNavbarLink as={Link} to="/adverts" onClick={handleToggle}>
-                Anuncios
-              </MDBNavbarLink>
+              <Link to={routes.adverts} className="nav-link mx-2">
+                <MDBIcon fas icon="home" className="pe-2" />
+                Inicio
+              </Link>
             </MDBNavbarItem>
             <MDBNavbarItem>
-              <MDBNavbarLink as={Link} to="/adverts/new" onClick={handleToggle}>
+              <Link to={routes.adverts} className="nav-link mx-2">
+                <MDBIcon fas icon="list" className="pe-2" />
+                Anuncios
+              </Link>
+            </MDBNavbarItem>
+            <MDBNavbarItem>
+              <Link to={routes.advertsNew} className="nav-link mx-2">
+                <MDBIcon fas icon="plus-circle" className="pe-2" />
                 Nuevo Anuncio
-              </MDBNavbarLink>
+              </Link>
+            </MDBNavbarItem>
+            <MDBNavbarItem className="ms-3">
+              <MDBBtn color="dark" rounded onClick={handleLogout}>
+                Cerrar Sesión
+              </MDBBtn>
             </MDBNavbarItem>
           </MDBNavbarNav>
-          <MDBBtn color="danger" onClick={handleLogout}>
-            Cerrar Sesión
-          </MDBBtn>
         </MDBCollapse>
       </MDBContainer>
     </MDBNavbar>

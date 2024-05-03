@@ -27,3 +27,21 @@ export const getAdvertById = async (id) => {
     throw error.response.data;
   }
 };
+
+export const deleteAdvert = async (id) => {
+  try {
+    const response = await api.delete(`/api/v1/adverts/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+export const getTags = async () => {
+  try {
+    const response = await api.get('/api/v1/adverts/tags');
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};

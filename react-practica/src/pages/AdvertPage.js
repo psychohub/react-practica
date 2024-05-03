@@ -1,12 +1,15 @@
+// AdvertPage.js
+
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import AdvertDetails from '../components/adverts/AdvertDetails';
 import Loader from '../components/Loader';
-
-import { getAdvertById } from '../api/adverts';
+import Navbar from '../components/Navbar';
+import { getAdvertById, deleteAdvert } from '../api/adverts';
 
 const AdvertPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [advert, setAdvert] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -25,19 +28,28 @@ const AdvertPage = () => {
     fetchAdvert();
   }, [id]);
 
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (!advert) {
-    return <div>No se encontró el anuncio.</div>;
-  }
+  const handleDelete = async () => {
+    try {
+      await deleteAdvert(id);
+      navigate('/adverts');
+    } catch (error) {
+      console.error('Error al eliminar el anuncio:', error);
+    }
+  };
 
   return (
-    <div>
+    <>
+      <Navbar />
       <h1>Detalle del Anuncio</h1>
-      <AdvertDetails advert={advert} />
-    </div>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <AdvertDetails advert={advert} />
+          <button onClick={handleDelete}>Eliminar Anuncio</button>
+        </>
+      )}
+    </>
   );
 };
 
