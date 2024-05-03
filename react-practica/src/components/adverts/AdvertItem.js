@@ -1,3 +1,4 @@
+// AdvertItem.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MDBListGroupItem } from 'mdb-react-ui-kit';
@@ -5,8 +6,10 @@ import { MDBListGroupItem } from 'mdb-react-ui-kit';
 const AdvertItem = ({ advert }) => {
   return (
     <MDBListGroupItem>
-      <Link to={`/v1/adverts/${advert.id}`}>{advert.name}</Link>
-      {/* Otros detalles del anuncio */}
+      <Link to={`/adverts/${advert.id}`}>{advert.name}</Link>
+      <p>Precio: {advert.price}</p>
+      <p>Tipo: {advert.sale ? 'Venta' : 'Compra'}</p>
+      <p>Tags: {advert.tags.join(', ')}</p>
     </MDBListGroupItem>
   );
 };

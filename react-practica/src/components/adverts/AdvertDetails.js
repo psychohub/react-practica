@@ -1,3 +1,4 @@
+// AdvertDetails.js
 import React from 'react';
 import {
   MDBCard,
@@ -11,11 +12,10 @@ const AdvertDetails = ({ advert }) => {
     <MDBCard>
       <MDBCardBody>
         <MDBCardTitle>{advert.name}</MDBCardTitle>
-        {/* Otros detalles del anuncio */}
         <MDBCardText>
-          {/* Aquí puedes agregar más detalles como el precio, descripción, etc. */}
-          Precio: {advert.price}
-          {/* Añade más campos según necesites */}
+          <p>Precio: {advert.price}</p>
+          <p>Tipo: {advert.sale ? 'Venta' : 'Compra'}</p>
+          <p>Tags: {advert.tags.join(', ')}</p>
         </MDBCardText>
       </MDBCardBody>
     </MDBCard>
