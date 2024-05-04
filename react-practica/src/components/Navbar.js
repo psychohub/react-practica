@@ -14,23 +14,30 @@ import {
   MDBNavbarNav,
 } from 'mdb-react-ui-kit';
 import { routes } from './routes/links';
+import ConfirmationModal from '../components/ConfirmationModal';
+
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const [showNavNoToggler, setShowNavNoToggler] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm(
-      '¿Estás seguro de que deseas cerrar sesión?'
-    );
-    if (confirmLogout) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('email');
-      storage.remove('auth');
-      removeAuthorizationHeader();
-      logout();
-      navigate(routes.login);
-    }
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    storage.remove('auth');
+    removeAuthorizationHeader();
+    logout();
+    navigate(routes.login);
+    setShowConfirmation(false);
+  };
+
+  const handleCancelLogout = () => {
+    setShowConfirmation(false);
   };
 
   if (!isAuthenticated) {
@@ -83,6 +90,13 @@ const Navbar = () => {
           </MDBNavbarNav>
         </MDBCollapse>
       </MDBContainer>
+      {showConfirmation && (
+        <ConfirmationModal
+          message="¿Estás seguro de que deseas cerrar sesión?"
+          onConfirm={handleConfirmLogout}
+          onCancel={handleCancelLogout}
+        />
+      )}
     </MDBNavbar>
   );
 };

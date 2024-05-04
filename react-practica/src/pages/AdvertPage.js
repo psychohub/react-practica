@@ -4,12 +4,14 @@ import AdvertDetails from '../components/adverts/AdvertDetails';
 import Loader from '../components/Loader';
 import Navbar from '../components/Navbar';
 import { getAdvertById, deleteAdvert } from '../api/adverts';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 const AdvertPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [advert, setAdvert] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     const fetchAdvert = async () => {
@@ -27,13 +29,22 @@ const AdvertPage = () => {
     fetchAdvert();
   }, [id]);
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
       await deleteAdvert(id);
       navigate('/adverts');
     } catch (error) {
       console.error('Error al eliminar el anuncio:', error);
     }
+    setShowConfirmation(false);
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmation(false);
   };
 
   return (
@@ -46,6 +57,13 @@ const AdvertPage = () => {
         <>
           <AdvertDetails advert={advert} />
           <button onClick={handleDelete}>Eliminar Anuncio</button>
+          {showConfirmation && (
+            <ConfirmationModal
+              message="¿Estás seguro de que deseas eliminar este anuncio?"
+              onConfirm={handleConfirmDelete}
+              onCancel={handleCancelDelete}
+            />
+          )}
         </>
       )}
     </>
