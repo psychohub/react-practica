@@ -9,7 +9,6 @@ const NotFoundPage = () => {
       <Navbar />
       <div className="not-found-page">
         <h1>404 - Página no encontrada</h1>
-        {/* ... */}
       </div>
     </>
   );

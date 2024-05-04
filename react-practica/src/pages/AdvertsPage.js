@@ -1,8 +1,7 @@
-// AdvertsPage.js
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import AdvertList from '../components/adverts/AdvertList';
+import { MDBRow } from 'mdb-react-ui-kit';
+import AdvertItem from '../components/adverts/AdvertItem';
 import FilterForm from '../components/filter/FilterForm';
 import Loader from '../components/Loader';
 import Navbar from '../components/Navbar';
@@ -41,7 +40,11 @@ const AdvertsPage = () => {
       {loading ? (
         <Loader />
       ) : filteredAdverts.length > 0 ? (
-        <AdvertList adverts={filteredAdverts} />
+        <MDBRow>
+          {filteredAdverts.map((advert) => (
+            <AdvertItem key={advert.id} advert={advert} />
+          ))}
+        </MDBRow>
       ) : (
         <div>
           <p>No hay anuncios disponibles.</p>

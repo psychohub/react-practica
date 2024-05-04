@@ -19,28 +19,22 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Intentando iniciar sesión con:', email, password);
     try {
       const response = await loginUser({ email, password });
-      console.log('Respuesta de loginUser:', response);
       const { accessToken } = response;
-      console.log('Token recibido:', accessToken);
       if (accessToken) {
         saveCredentials({ accessToken });
-        console.log('Credenciales almacenadas');
         localStorage.setItem('token', accessToken);
         if (rememberPassword) {
           localStorage.setItem('email', email);
         } else {
           localStorage.removeItem('email');
         }
-        console.log('Redirigiendo a:', from);
         navigate(from, { replace: true });
       } else {
         throw new Error('No accessToken received');
       }
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
       setError('Error al iniciar sesión: ' + error.message);
     }
   };
