@@ -1,5 +1,3 @@
-// AdvertDetails.js
-
 import React from 'react';
 import {
   MDBCard,

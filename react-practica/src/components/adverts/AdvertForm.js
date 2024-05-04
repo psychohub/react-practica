@@ -1,5 +1,3 @@
-// AdvertForm.js
-
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { createAdvert, getTags } from '../../api/adverts';
@@ -37,7 +35,10 @@ const AdvertForm = ({ onSubmit }) => {
     formData.append('name', name);
     formData.append('sale', sale);
     formData.append('price', price);
-    formData.append('tags', selectedTags.map((tag) => tag.value));
+    formData.append(
+      'tags',
+      selectedTags.map((tag) => tag.value)
+    );
     if (photo) {
       formData.append('photo', photo);
     }
@@ -96,7 +97,10 @@ const AdvertForm = ({ onSubmit }) => {
 
       {error && <div className="text-danger">{error}</div>}
 
-      <MDBBtn type="submit" disabled={!name || !price || selectedTags.length === 0}>
+      <MDBBtn
+        type="submit"
+        disabled={!name || !price || selectedTags.length === 0}
+      >
         Crear anuncio
       </MDBBtn>
     </form>

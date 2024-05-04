@@ -11,7 +11,7 @@ export const AppRoutes = () => {
   return (
     <Routes>
       <Route path={routes.login} element={<LoginPage />} />
-      <Route path="/" element={<Navigate replace to={routes.adverts} />} />
+      <Route path="/" element={<Navigate replace to={routes.login} />} />
       <Route
         path={routes.adverts}
         element={

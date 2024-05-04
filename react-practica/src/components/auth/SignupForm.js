@@ -12,7 +12,6 @@ const SignupForm = () => {
     e.preventDefault();
     try {
       await signupUser({ email, password, username, name });
-      // Realizar acciones adicionales después del registro exitoso
     } catch (error) {
       setError('Error al registrar el usuario');
     }
