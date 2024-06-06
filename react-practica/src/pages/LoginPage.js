@@ -24,11 +24,8 @@ const LoginPage = () => {
       const { accessToken } = response;
       if (accessToken) {
         saveCredentials({ accessToken });
-        localStorage.setItem('token', accessToken);
         if (rememberPassword) {
-          localStorage.setItem('email', email);
-        } else {
-          localStorage.removeItem('email');
+          localStorage.setItem('token', accessToken);
         }
         navigate(from, { replace: true });
       } else {

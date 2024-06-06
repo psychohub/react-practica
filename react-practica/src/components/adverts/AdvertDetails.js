@@ -17,9 +17,9 @@ const AdvertDetails = ({ advert }) => {
           <MDBCol md="2">
             <MDBCardTitle>{advert.name}</MDBCardTitle>
             <MDBCardText>
-              <p>Precio: {advert.price}</p>
-              <p>Tipo: {advert.sale ? 'Venta' : 'Compra'}</p>
-              <p>Tags: {advert.tags.join(', ')}</p>
+              <div>Precio: {advert.price}</div>
+              <div>Tipo: {advert.sale ? 'Venta' : 'Compra'}</div>
+              <div>Tags: {advert.tags.join(', ')}</div>
             </MDBCardText>
           </MDBCol>
           <MDBCol md="2">

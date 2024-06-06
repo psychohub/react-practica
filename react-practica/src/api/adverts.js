@@ -11,7 +11,11 @@ export const getAdverts = async () => {
 
 export const createAdvert = async (advertData) => {
   try {
-    const response = await api.post('/api/v1/adverts', advertData);
+    const response = await api.post('/api/v1/adverts', advertData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   } catch (error) {
     throw error.response.data;

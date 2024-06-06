@@ -27,7 +27,7 @@ const AdvertPage = () => {
     };
 
     fetchAdvert();
-  }, [id]);
+  }, [id, navigate]);
 
   const handleDelete = () => {
     setShowConfirmation(true);

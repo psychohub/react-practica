@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { createAdvert, getTags } from '../../api/adverts';
 import { MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 
-const AdvertForm = ({ onSubmit }) => {
+const AdvertForm = () => {
   const [name, setName] = useState('');
   const [sale, setSale] = useState(false);
   const [price, setPrice] = useState('');
@@ -11,6 +12,7 @@ const AdvertForm = ({ onSubmit }) => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [photo, setPhoto] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -31,6 +33,7 @@ const AdvertForm = ({ onSubmit }) => {
       setError('Por favor, completa todos los campos obligatorios');
       return;
     }
+
     const formData = new FormData();
     formData.append('name', name);
     formData.append('sale', sale);
@@ -42,7 +45,14 @@ const AdvertForm = ({ onSubmit }) => {
     if (photo) {
       formData.append('photo', photo);
     }
-    onSubmit(formData);
+
+    try {
+      const advert = await createAdvert(formData);
+      navigate(`/adverts/${advert.id}`);
+    } catch (error) {
+      console.error('Error al crear el anuncio:', error);
+      setError('Error al crear el anuncio');
+    }
   };
 
   return (

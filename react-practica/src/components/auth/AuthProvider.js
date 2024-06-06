@@ -4,6 +4,10 @@ import {
   setCredentialsInStorage,
   clearCredentialsFromStorage,
 } from '../../utils/credentialsHelper';
+import {
+  setAuthorizationHeader,
+  removeAuthorizationHeader,
+} from '../../api/api';
 
 const AuthContext = createContext(null);
 
@@ -19,9 +23,21 @@ export const AuthProvider = ({ children }) => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const saveCredentials = (newCredentials) => {
+  useEffect(() => {
+    if (credentials) {
+      setAuthorizationHeader(credentials.token);
+    } else {
+      removeAuthorizationHeader();
+    }
+  }, [credentials]);
+
+  const saveCredentials = (newCredentials, rememberMe) => {
     setCredentials(newCredentials);
-    setCredentialsInStorage(newCredentials);
+    if (rememberMe) {
+      setCredentialsInStorage(newCredentials);
+    } else {
+      clearCredentialsFromStorage();
+    }
   };
 
   const logout = () => {

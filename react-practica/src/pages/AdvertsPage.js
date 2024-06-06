@@ -9,7 +9,7 @@ import { getAdverts } from '../api/adverts';
 
 const AdvertsPage = () => {
   const [adverts, setAdverts] = useState([]);
-  const [filteredAdverts, setFilteredAdverts] = useState([]);
+  const [filter, setFilter] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,7 +17,6 @@ const AdvertsPage = () => {
       try {
         const data = await getAdverts();
         setAdverts(data);
-        setFilteredAdverts(data);
         setLoading(false);
       } catch (error) {
         console.error('Error al obtener los anuncios:', error);
@@ -28,15 +27,25 @@ const AdvertsPage = () => {
     fetchAdverts();
   }, []);
 
-  const handleFilterChange = (newFilteredAdverts) => {
-    setFilteredAdverts(newFilteredAdverts);
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
   };
+
+  // Filtrar anuncios directamente en el render
+  const filteredAdverts = adverts.filter((advert) =>
+    advert.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
   return (
     <>
       <Navbar />
       <h1>Listado de Anuncios</h1>
-      <FilterForm adverts={adverts} onFilterChange={handleFilterChange} />
+      <input
+        type="text"
+        placeholder="Filtrar anuncios"
+        value={filter}
+        onChange={handleFilterChange}
+      />
       {loading ? (
         <Loader />
       ) : filteredAdverts.length > 0 ? (

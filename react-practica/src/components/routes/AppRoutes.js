@@ -7,7 +7,7 @@ import NotFoundPage from '../../pages/NotFoundPage';
 import RequireAuth from '../auth/RequireAuth';
 import { routes } from './links';
 
-export const AppRoutes = () => {
+const AppRoutes = () => {
   return (
     <Routes>
       <Route path={routes.login} element={<LoginPage />} />
@@ -40,3 +40,5 @@ export const AppRoutes = () => {
     </Routes>
   );
 };
+
+export default AppRoutes;
